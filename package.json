@@ -3,6 +3,7 @@
   "dependencies": {
     "node-twitter-api": "*",
     "express": "*",
-    "socket.io": "*"
+    "socket.io": "*",
+    "body-parser": "*"
   }
 }

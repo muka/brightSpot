@@ -26,8 +26,9 @@ body {
     /*background: -moz-linear-gradient(left, rgba(tomato, 0.5) 0%, rgba(white, 0.9) 100%);*/
 }
 
-#lightup {
+#lightup, button {
 
+    color: #FFF;
     background-color: rgba(tomato, 0.4);
 
     &:hover, &:active {
@@ -38,4 +39,10 @@ body {
 
 .reveal-modal {
     color: black;
+}
+
+
+#map {
+    width: 100%;
+    height: 180px;
 }

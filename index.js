@@ -30,15 +30,47 @@ twitter.getRequestToken(function(error, requestToken, requestTokenSecret, result
 app.use('/', require('express').static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/public/index.html');
+    res.sendfile(__dirname + '/public/home.html');
+});
+
+app.get('/propose', function (req, res) {
+    res.sendfile(__dirname + '/public/propose.html');
+});
+
+app.use(require('body-parser')());
+app.post('/propose/send', function(req, res) {
+
+    var body = req.body;
+
+//    console.log(body);
+
+    var tweet = "#BrightSpot #" + body.activity.replace(' ', '-') + " #" + body.topic.replace(' ', '-') + " at " + body.date + " @" + body.place;
+    console.log(tweet);
+
+    twitter.statuses("update", {
+            status: tweet
+        },
+        twdata.accessToken,
+        twdata.accessTokenSecret,
+        function(error, data, response) {
+            if (error) {
+                res.send(500);
+            } else {
+                res.send(200);
+            }
+            res.end();
+        }
+    );
+
+
 });
 
 app.get('/login', function (req, res) {
-  res.sendfile(__dirname + '/public/login.html');
+    res.sendfile(__dirname + '/public/login.html');
 });
 
 app.get('/login/go', function (req, res) {
-    res.redirect(200, 'https://twitter.com/oauth/authenticate?oauth_token=' + twdata.requestToken);
+    res.redirect(301, 'https://twitter.com/oauth/authenticate?oauth_token=' + twdata.requestToken);
     res.end();
 });
 
