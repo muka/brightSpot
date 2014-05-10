@@ -1,0 +1,3 @@
+[submodule "public_html/js/compose.io"]
+	path = public_html/js/compose.io
+	url = https://github.com/compose-eu/Appcelerator.git

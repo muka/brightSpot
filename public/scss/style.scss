@@ -1,0 +1,41 @@
+
+
+#full-width {
+    width: 100%;
+}
+
+
+body {
+    color: rgba(#FFFFFF, 0.85);
+    /*background-color: rgba(#000000, 0.85)*/
+    background-color: #000000;
+}
+
+.action-button {
+    cursor: pointer;
+    color: #FFF;
+    background-color: rgba(#FFFFFF, 0.15);
+    line-height: 5em;
+    text-align: center;
+    margin: 0.5em 0;
+}
+
+.progress .meter {
+    background: none repeat scroll 0 0 rgba(tomato, .4);
+    /*background: linear-gradient(left, tomato 50%, white 90%);*/
+    /*background: -moz-linear-gradient(left, rgba(tomato, 0.5) 0%, rgba(white, 0.9) 100%);*/
+}
+
+#lightup {
+
+    background-color: rgba(tomato, 0.4);
+
+    &:hover, &:active {
+        background-color: rgba(tomato, 0.6);
+    }
+
+}
+
+.reveal-modal {
+    color: black;
+}

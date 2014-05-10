@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <title>brightSpot</title>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/5.2.2/css/foundation.min.css">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/5.2.2/css/normalize.min.css">
+        <link rel="stylesheet" href="css/style.css">
+
+        <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.2.2/js/foundation/foundation.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.2.2/js/foundation/foundation.reveal.js"></script>
+
+        <!--<script src="js/compose.io/index.js"></script>-->
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+
+            jQuery(document).ready(function(){
+
+                $(document).foundation();
+
+                $('.input-subactivity').on("click", function() {
+
+                    var v = $(this).data('reveal-id');
+
+//                    $('#'+v)
+                    $('#modal-subactivity')
+                            .foundation('reveal')
+                            .foundation('reveal', 'open', {});
+
+                });
+
+                $(document).on('click', '.close-reveal-modal', function() {
+                    $('[data-reveal].open').foundation('reveal', 'close')
+                });
+
+            });
+//
+//            var socket = io.connect('http://localhost:8090');
+//            socket.on('news', function(data) {
+//                console.log(data);
+//                socket.emit('my other event', {my: 'data'});
+//            });
+
+        </script>
+
+        <!--
+                <script>
+
+                    Compose.ready(function(compose) {
+
+                        compose.setup('OWIzZjk4MmUtMjNlOC00ZTZkLWI3YjItY2JkMGEwYzNiMzJmYzI4Y2RlNTMtNzFmYy00MzY5LWE5M2YtZmUyYzUzOTVkYTFj');
+
+                        var list = {
+                            study: "139973385949113af8188748f43a0b9a59d9d7dd4c06a",
+                            coworking: "1399733968407e46deaa47b74483b9877c7b35cf1ba12",
+                            performing: "13997340015586483d08f31d74b41a3421d7e2c28f1ad",
+                        };
+
+                        compose.load(list.study).then(function(so) {
+
+                        });
+
+                    });
+
+
+                </script>
+        -->
+
+    </head>
+    <body>
+        <div class="container">
+
+
+            <div class="row">
+                <div class="columns large-12">
+                    <img src="img/logo.png" width="150" />
+                </div>
+            </div>
+
+            <div class="page-propose">
+                <div class="row">
+                    <div class="columns large-12">
+
+                        <div class="action-button input-subactivity">
+                            fluid studying
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="columns large-12">
+
+                        <div class="action-button input-subactivity">
+                            co-working
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="columns large-12">
+                        <div class="action-button input-subactivity"  data-reveal-id="modal-map">
+                            perform
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- /propose-->
+
+
+            <div class="page-review hide">
+                <div class="row">
+                    <div class="columns large-12">
+
+                        <div class="action-button open-modal"  data-reveal-id="modal-activity">
+                            fluid studying
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="columns large-12">
+
+                        <div class="action-button open-modal"  data-reveal-id="modal-subactivity">
+                            live painting
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="columns large-12">
+                        <div class="action-button open-modal"  data-reveal-id="modal-map">
+                            @Ca' de Bezzi
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="columns large-6">
+                        <div class="left">
+                            11-05-2014
+                        </div>
+                    </div>
+                    <div class="columns large-6">
+                        <div class="right">
+                            16:00 - 22.00
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="columns large-12">
+                        <br />
+                        <br />
+                        <div class="progress large-12 radius">
+                            <span class="meter"></span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="columns large-12">
+                        <br />
+                        <br />
+                        <button id='lightup' class='button large-12'>light up !</button>
+                    </div>
+                </div>
+
+            </div><!--review-->
+
+
+
+        </div>
+
+
+        <div id="modal-activity" class="reveal-modal hide" data-reveal>
+
+            <ul>
+                <li>fluid studying</li>
+                <li>perform</li>
+                <li>co-working</li>
+            </ul>
+
+            <a class="close-reveal-modal">&#215;</a>
+
+        </div>
+
+        <div id="modal-subactivity" class="reveal-modal hide" data-reveal>
+            <br />
+            <br />
+            <input type="text" class="input" />
+
+            <a class="close-reveal-modal">&#215;</a>
+
+        </div>
+
+        <div id="modal-map" class="reveal-modal hide" data-reveal>
+
+            <div id='map'></div>
+
+            <a class="close-reveal-modal">&#215;</a>
+
+        </div>
+
+
+
+    </body>
+</html>

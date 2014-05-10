@@ -1,0 +1,8 @@
+{
+  "name": "brightLight",
+  "dependencies": {
+    "node-twitter-api": "*",
+    "express": "*",
+    "socket.io": "*"
+  }
+}
