@@ -1,5 +1,6 @@
 {
   "name": "brightLight",
+  "version": "0.1.0",
   "dependencies": {
     "node-twitter-api": "*",
     "express": "*",
