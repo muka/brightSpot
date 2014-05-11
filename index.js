@@ -35,9 +35,10 @@ app.use(cookieParser()); // required before session.
 app.use(session({
     secret: 'fdasklfdsanjfdsjkkfdsnfdsdskfnjdfsdsjfjkfdsasas',
     key: 'sid',
-cookie: { secure: true }}));
-
-
+cookie: {
+    expires: false,
+    secure: false
+}}));
 
 
 app.use('/', express.static(__dirname + '/public'));
@@ -65,31 +66,38 @@ app.post('/propose/send', function(req, res) {
 
     var tweet = "#BrightSpot #" + body.activity.replace(' ', '-') + " #" + body.topic.replace(' ', '-') + " at " + body.date + " @" + body.place;
 
-    var posturl = 'http://83.212.96.61:8010/';
-
-//    restler
-    restler.post(posturl, {
-        data: body.topic
-    });
-
     console.log(tweet);
 
-    twitter.statuses("update", {
-            status: tweet
-        },
-        req.session.accessToken,
-        req.session.accessTokenSecret,
-        function(error, data, response) {
-            if (error) {
-                console.log(error);
-                res.send(500);
-            } else {
-                console.log(response);
-                res.send(response.statusCode || 500);
-            }
-        }
-    );
+    if(req.session.accessTokenSecret) {
 
+        console.log("Tweet with token",  req.session.accessTokenSecret);
+
+        twitter.statuses("update", {
+                status: tweet
+            },
+            req.session.accessToken,
+            req.session.accessTokenSecret,
+            function(error, data, response) {
+                if (error) {
+                    console.log(error);
+                    res.send(500);
+
+                        // demo hack :P drop me
+                        var posturl = 'http://83.212.96.61:8010/';
+                    //    restler
+                        restler.post(posturl, {
+                            data: body.topic
+                        });
+
+
+                } else {
+                    console.log(data);
+//                    res.send(response.statusCode || 500);
+                    res.redirect("/");
+                }
+            }
+        );
+    }
 
 });
 
@@ -111,10 +119,11 @@ app.get('/login/go', function (req, res) {
 
             req.session.requestTokenSecret = requestTokenSecret;
             req.session.requestToken = requestToken;
+            req.session.save(function() {
 
-            console.log("Session tokens", req.session);
-
-            res.redirect('https://twitter.com/oauth/authenticate?oauth_token=' + requestToken);
+                console.log("Session tokens", req.session.requestTokenSecret, req.session.requestToken);
+                res.redirect('https://twitter.com/oauth/authenticate?oauth_token=' + requestToken);
+            });
         }
     });
 
@@ -123,7 +132,9 @@ app.get('/login/go', function (req, res) {
 app.get('/login/auth', function (req, res) {
 
     console.log("Auth with ");
-    console.log(req.query.oauth_token, req.session.requestTokenSecret, req.query.oauth_verifier);
+    console.log("token: " + req.query.oauth_token,
+                "secret: " + req.session.requestTokenSecret,
+                "verify" + req.query.oauth_verifier);
 
     twitter.getAccessToken(req.query.oauth_token, req.session.requestTokenSecret, req.query.oauth_verifier, function(error, accessToken, accessTokenSecret, results) {
         if (error) {
