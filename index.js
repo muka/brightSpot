@@ -71,12 +71,12 @@ app.post('/propose/send', function(req, res) {
 
     console.log(tweet);
 
-        // demo hack :P drop me
-        var posturl = 'http://83.212.96.61:8010/';
-    //    restler
-        restler.post(posturl, {
-            data: body.topic
-        });
+    // demo hack :P drop me
+    var posturl = 'http://83.212.96.61:8010/';
+//    restler
+    restler.post(posturl, {
+        data: body.topic
+    });
 
     if(req.session.accessTokenSecret) {
 
@@ -100,7 +100,7 @@ app.post('/propose/send', function(req, res) {
             }
         );
     }
-    else res.end();
+//    else res.end();
 
 });
 
