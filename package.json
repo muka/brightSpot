@@ -4,6 +4,8 @@
     "node-twitter-api": "*",
     "express": "*",
     "socket.io": "*",
-    "body-parser": "*"
+    "body-parser": "*",
+    "cookie-parser": "*",
+    "express-session": "*"
   }
 }

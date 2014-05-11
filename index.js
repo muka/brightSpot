@@ -1,4 +1,9 @@
-var app = require('express')()
+
+var express      = require('express')
+var cookieParser = require('cookie-parser')
+var session      = require('express-session')
+
+var app = express()
   , server = require('http').createServer(app)
   , io = require('socket.io').listen(server);
 
@@ -9,7 +14,7 @@ server.listen(8090);
 var twitter = new twitterAPI({
     consumerKey: 'oxNnEWipa0vJZ29UK2EOEDbH4',
     consumerSecret: 'SPQeO6oVOmeyerLlwU2bpw3QWKVyhbMcKzz3tJBLvkp6OGJXQz',
-//    callback: 'http://yoururl.tld/something'
+    callback: 'http://yoururl.tld/something'
 });
 
 var twdata = {};
@@ -27,7 +32,7 @@ twitter.getRequestToken(function(error, requestToken, requestTokenSecret, result
 });
 
 
-app.use('/', require('express').static(__dirname + '/public'));
+app.use('/', express.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
     res.sendfile(__dirname + '/public/home.html');
@@ -54,9 +59,11 @@ app.post('/propose/send', function(req, res) {
         twdata.accessTokenSecret,
         function(error, data, response) {
             if (error) {
+                console.log(error);
                 res.send(500);
             } else {
-                res.send(200);
+                console.log(response);
+                res.send(response.statusCode || 500);
             }
             res.end();
         }
@@ -74,11 +81,11 @@ app.get('/login/go', function (req, res) {
     res.end();
 });
 
-io.sockets.on('connection', function (socket) {
-    socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function (data) {
-        console.log(data);
-    });
-});
+//io.sockets.on('connection', function (socket) {
+//    socket.emit('news', { hello: 'world' });
+//    socket.on('my other event', function (data) {
+//        console.log(data);
+//    });
+//});
 
-console.log("started");
+console.log("Started..");
