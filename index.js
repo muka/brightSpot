@@ -14,7 +14,7 @@ server.listen(8090);
 var twitter = new twitterAPI({
     consumerKey: 'oxNnEWipa0vJZ29UK2EOEDbH4',
     consumerSecret: 'SPQeO6oVOmeyerLlwU2bpw3QWKVyhbMcKzz3tJBLvkp6OGJXQz',
-    callback: 'http://yoururl.tld/something'
+    callback: 'http://83.212.96.61:8090/login/auth'
 });
 
 var twdata = {};
@@ -78,6 +78,12 @@ app.get('/login', function (req, res) {
 
 app.get('/login/go', function (req, res) {
     res.redirect(301, 'https://twitter.com/oauth/authenticate?oauth_token=' + twdata.requestToken);
+    res.end();
+});
+
+app.get('/login/auth', function (req, res) {
+
+    res.redirect(301, '/propose');
     res.end();
 });
 
