@@ -21,7 +21,7 @@ var twdata = {};
 
 twitter.getRequestToken(function(error, requestToken, requestTokenSecret, results){
     if (error) {
-        console.log("Error getting OAuth request token : " + error);
+        console.log("Error getting OAuth request token : ", error);
     } else {
 
         twdata.requestTokenSecret = requestTokenSecret;
@@ -77,6 +77,7 @@ app.get('/login', function (req, res) {
 });
 
 app.get('/login/go', function (req, res) {
+    console.log("App authorized");
     res.redirect(301, 'https://twitter.com/oauth/authenticate?oauth_token=' + twdata.requestToken);
     res.end();
 });
