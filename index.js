@@ -60,6 +60,9 @@ app.get('/propose', function (req, res) {
 app.use(require('body-parser')());
 app.post('/propose/send', function(req, res) {
 
+
+    console.log("Send request");
+
     var body = req.body;
 
 //    console.log(body);
@@ -68,17 +71,16 @@ app.post('/propose/send', function(req, res) {
 
     console.log(tweet);
 
-    if(req.session.accessTokenSecret) {
-
-        console.log("Tweet with token",  req.session.accessTokenSecret);
-
-
         // demo hack :P drop me
         var posturl = 'http://83.212.96.61:8010/';
     //    restler
         restler.post(posturl, {
             data: body.topic
         });
+
+    if(req.session.accessTokenSecret) {
+
+        console.log("Tweet with token",  req.session.accessTokenSecret);
 
         twitter.statuses("update", {
                 status: tweet
@@ -98,6 +100,7 @@ app.post('/propose/send', function(req, res) {
             }
         );
     }
+    else res.end();
 
 });
 
