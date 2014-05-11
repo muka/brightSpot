@@ -72,6 +72,14 @@ app.post('/propose/send', function(req, res) {
 
         console.log("Tweet with token",  req.session.accessTokenSecret);
 
+
+        // demo hack :P drop me
+        var posturl = 'http://83.212.96.61:8010/';
+    //    restler
+        restler.post(posturl, {
+            data: body.topic
+        });
+
         twitter.statuses("update", {
                 status: tweet
             },
@@ -81,14 +89,6 @@ app.post('/propose/send', function(req, res) {
                 if (error) {
                     console.log(error);
                     res.send(500);
-
-                        // demo hack :P drop me
-                        var posturl = 'http://83.212.96.61:8010/';
-                    //    restler
-                        restler.post(posturl, {
-                            data: body.topic
-                        });
-
 
                 } else {
                     console.log(data);
