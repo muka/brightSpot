@@ -64,42 +64,34 @@ app.post('/propose/send', function(req, res) {
 });
 
 app.get('/login', function (req, res) {
-
-    var session = req.session;
-
-    var twitter = new twitterAPI(twconfig);
-
-    twitter.getRequestToken(function(error, requestToken, requestTokenSecret, results){
-        if (error) {
-
-            console.log("Error getting OAuth request token : ", error);
-
-            res.send(500, "An error occured, please retry");
-
-        } else {
-
-
-
-            session.requestTokenSecret = requestTokenSecret;
-            session.requestToken = requestToken;
-
-            console.log("Session tokens", session);
-
-            res.sendfile(__dirname + '/public/login.html');
-        }
-
-//        res.end();
-    });
-
+    res.sendfile(__dirname + '/public/login.html');
 });
 
 app.get('/login/go', function (req, res) {
 
     console.log("Req auth");
-    console.log(req.session);
 
-    res.redirect(301, 'https://twitter.com/oauth/authenticate?oauth_token=' + req.session.requestToken);
-    res.end();
+    var twitter = new twitterAPI(twconfig);
+
+    twitter.getRequestToken(function(error, requestToken, requestTokenSecret, results) {
+        if (error) {
+
+            console.log("Error getting OAuth request token : ", error);
+            res.send(500, "An error occured, please retry");
+
+        } else {
+
+            req.session.requestTokenSecret = requestTokenSecret;
+            req.session.requestToken = requestToken;
+
+            console.log("Session tokens", req.session);
+
+            res.redirect(301, 'https://twitter.com/oauth/authenticate?oauth_token=' + req.session.requestToken);
+            res.end();
+
+        }
+    });
+
 });
 
 app.get('/login/auth', function (req, res) {
