@@ -8,11 +8,11 @@ var twconfig = {
 
 //dev version 127.0.0.1
 
-twconfig = {
-    consumerKey: 'FklmYXKb8z3aZweMqw4T2qIdO',
-    consumerSecret: 'dMH77bQuj1qAbExBI4T2fXoVz4ZLrt6a7dDR0Fx4I5cNfapxZI',
-    callback: 'http://127.0.0.1:8090/login/auth'
-};
+//twconfig = {
+//    consumerKey: 'FklmYXKb8z3aZweMqw4T2qIdO',
+//    consumerSecret: 'dMH77bQuj1qAbExBI4T2fXoVz4ZLrt6a7dDR0Fx4I5cNfapxZI',
+//    callback: 'http://127.0.0.1:8090/login/auth'
+//};
 
 var express      = require('express')
 var cookieParser = require('cookie-parser')
@@ -48,8 +48,7 @@ app.get('/', function (req, res) {
         res.sendfile(__dirname + '/public/home.html');
     else {
         console.log("login", req.url + '/login');
-        res.redirect(307, req.url + '/login');
-        res.end();
+        res.redirect(req.url + '/login');
     }
 });
 
@@ -74,23 +73,22 @@ app.post('/propose/send', function(req, res) {
     });
 
     console.log(tweet);
-//
-//    twitter.statuses("update", {
-//            status: tweet
-//        },
-//        req.session.accessToken,
-//        req.session.accessTokenSecret,
-//        function(error, data, response) {
-//            if (error) {
-//                console.log(error);
-//                res.send(500);
-//            } else {
-//                console.log(response);
-//                res.send(response.statusCode || 500);
-//            }
-//            res.end();
-//        }
-//    );
+
+    twitter.statuses("update", {
+            status: tweet
+        },
+        req.session.accessToken,
+        req.session.accessTokenSecret,
+        function(error, data, response) {
+            if (error) {
+                console.log(error);
+                res.send(500);
+            } else {
+                console.log(response);
+                res.send(response.statusCode || 500);
+            }
+        }
+    );
 
 
 });
@@ -116,8 +114,7 @@ app.get('/login/go', function (req, res) {
 
             console.log("Session tokens", req.session);
 
-            res.redirect(307, 'https://twitter.com/oauth/authenticate?oauth_token=' + requestToken);
-            res.end();
+            res.redirect('https://twitter.com/oauth/authenticate?oauth_token=' + requestToken);
         }
     });
 
@@ -125,17 +122,22 @@ app.get('/login/go', function (req, res) {
 
 app.get('/login/auth', function (req, res) {
 
+    console.log("Auth with ");
+    console.log(req.query.oauth_token, req.session.requestTokenSecret, req.query.oauth_verifier);
+
     twitter.getAccessToken(req.query.oauth_token, req.session.requestTokenSecret, req.query.oauth_verifier, function(error, accessToken, accessTokenSecret, results) {
         if (error) {
-            console.log(error);
+
+            console.log("Error on authentication");
+            console.log(req.query, error);
+
             res.send(error.statusCode || 500);
         } else {
 
             req.session.accessToken = accessToken;
             req.session.accessTokenSecret = accessTokenSecret;
 
-            res.redirect(307, '/propose');
-            res.end();
+            res.redirect('/propose');
         }
     });
 
