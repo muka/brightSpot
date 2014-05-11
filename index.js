@@ -78,8 +78,12 @@ app.get('/login', function (req, res) {
 
         } else {
 
+
+
             session.requestTokenSecret = requestTokenSecret;
             session.requestToken = requestToken;
+
+            console.log("Session tokens", session);
 
             res.sendfile(__dirname + '/public/login.html');
         }
@@ -90,7 +94,10 @@ app.get('/login', function (req, res) {
 });
 
 app.get('/login/go', function (req, res) {
-    console.log("App authorized");
+
+    console.log("Req auth");
+    console.log(req.session);
+
     res.redirect(301, 'https://twitter.com/oauth/authenticate?oauth_token=' + req.session.requestToken);
     res.end();
 });
