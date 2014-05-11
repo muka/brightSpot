@@ -92,8 +92,8 @@ app.post('/propose/send', function(req, res) {
 
                 } else {
                     console.log(data);
-//                    res.send(response.statusCode || 500);
-                    res.redirect("/");
+                    res.send(response.statusCode || 200);
+//                    res.redirect("/propose");
                 }
             }
         );
