@@ -5,28 +5,52 @@ var twconfig = {
     callback: 'http://83.212.96.61:8090/login/auth'
 };
 
+
+//dev version 127.0.0.1
+
+twconfig = {
+    consumerKey: 'FklmYXKb8z3aZweMqw4T2qIdO',
+    consumerSecret: 'dMH77bQuj1qAbExBI4T2fXoVz4ZLrt6a7dDR0Fx4I5cNfapxZI',
+    callback: 'http://127.0.0.1:8090/login/auth'
+};
+
 var express      = require('express')
 var cookieParser = require('cookie-parser')
 var session      = require('express-session')
 
 var app = express()
   , server = require('http').createServer(app)
-  , io = require('socket.io').listen(server);
+  , restler = require('restler')
+//  , io = require('socket.io').listen(server);
 
-var twitterAPI = require('node-twitter-api');
-
-app.use(cookieParser()) // required before session.
-app.use(session({
-    secret: 'fdasklfdsanjfdsjkkfdsnfdsdskfnjdfsdsjfjkfds',
-    key: 'sid',
-cookie: { secure: true }}))
 
 server.listen(8090);
+
+
+
+var twitterAPI = require('node-twitter-api');
+var twitter = new twitterAPI(twconfig);
+
+app.use(cookieParser()); // required before session.
+app.use(session({
+    secret: 'fdasklfdsanjfdsjkkfdsnfdsdskfnjdfsdsjfjkfdsasas',
+    key: 'sid',
+cookie: { secure: true }}));
+
+
+
 
 app.use('/', express.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
-    res.sendfile(__dirname + '/public/home.html');
+
+    if(req.loggedin)
+        res.sendfile(__dirname + '/public/home.html');
+    else {
+        console.log("login", req.url + '/login');
+        res.redirect(307, req.url + '/login');
+        res.end();
+    }
 });
 
 app.get('/propose', function (req, res) {
@@ -41,24 +65,32 @@ app.post('/propose/send', function(req, res) {
 //    console.log(body);
 
     var tweet = "#BrightSpot #" + body.activity.replace(' ', '-') + " #" + body.topic.replace(' ', '-') + " at " + body.date + " @" + body.place;
-    console.log(tweet);
 
-    twitter.statuses("update", {
-            status: tweet
-        },
-        twdata.accessToken,
-        twdata.accessTokenSecret,
-        function(error, data, response) {
-            if (error) {
-                console.log(error);
-                res.send(500);
-            } else {
-                console.log(response);
-                res.send(response.statusCode || 500);
-            }
-            res.end();
-        }
-    );
+    var posturl = 'http://83.212.96.61:8010/';
+
+//    restler
+    restler.post(posturl, {
+        data: body.topic
+    });
+
+    console.log(tweet);
+//
+//    twitter.statuses("update", {
+//            status: tweet
+//        },
+//        req.session.accessToken,
+//        req.session.accessTokenSecret,
+//        function(error, data, response) {
+//            if (error) {
+//                console.log(error);
+//                res.send(500);
+//            } else {
+//                console.log(response);
+//                res.send(response.statusCode || 500);
+//            }
+//            res.end();
+//        }
+//    );
 
 
 });
@@ -70,10 +102,8 @@ app.get('/login', function (req, res) {
 app.get('/login/go', function (req, res) {
 
     console.log("Req auth");
-
-    var twitter = new twitterAPI(twconfig);
-
     twitter.getRequestToken(function(error, requestToken, requestTokenSecret, results) {
+
         if (error) {
 
             console.log("Error getting OAuth request token : ", error);
@@ -86,9 +116,8 @@ app.get('/login/go', function (req, res) {
 
             console.log("Session tokens", req.session);
 
-            res.redirect(301, 'https://twitter.com/oauth/authenticate?oauth_token=' + req.session.requestToken);
+            res.redirect(307, 'https://twitter.com/oauth/authenticate?oauth_token=' + requestToken);
             res.end();
-
         }
     });
 
@@ -96,8 +125,21 @@ app.get('/login/go', function (req, res) {
 
 app.get('/login/auth', function (req, res) {
 
-    res.redirect(301, '/propose');
-    res.end();
+    twitter.getAccessToken(req.query.oauth_token, req.session.requestTokenSecret, req.query.oauth_verifier, function(error, accessToken, accessTokenSecret, results) {
+        if (error) {
+            console.log(error);
+            res.send(error.statusCode || 500);
+        } else {
+
+            req.session.accessToken = accessToken;
+            req.session.accessTokenSecret = accessTokenSecret;
+
+            res.redirect(307, '/propose');
+            res.end();
+        }
+    });
+
+
 });
 
 //io.sockets.on('connection', function (socket) {
