@@ -64,7 +64,7 @@ app.post('/propose/send', function(req, res) {
 
 //    console.log(body);
 
-    var tweet = "#BrightSpot #" + body.activity.replace(' ', '-') + " #" + body.topic.replace(' ', '-') + " at " + body.date + " @" + body.place;
+    var tweet = "#BrightSpot #" + body.activity.replace(' ', '-') + " #" + body.topic.replace(' ', '-') + " at " + body.date + " #" + body.place.replace(' ', '-');
 
     console.log(tweet);
 
