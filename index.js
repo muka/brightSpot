@@ -78,14 +78,13 @@ app.get('/login', function (req, res) {
 
         } else {
 
-
             session.requestTokenSecret = requestTokenSecret;
             session.requestToken = requestToken;
 
             res.sendfile(__dirname + '/public/login.html');
         }
 
-        res.end();
+//        res.end();
     });
 
 });
