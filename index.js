@@ -23,9 +23,9 @@ var app = express()
   , restler = require('restler')
 //  , io = require('socket.io').listen(server);
 
+app.use(require('body-parser')());
 
 server.listen(8090);
-
 
 
 var twitterAPI = require('node-twitter-api');
@@ -53,13 +53,8 @@ app.get('/', function (req, res) {
     }
 });
 
-app.get('/propose', function (req, res) {
-    res.sendfile(__dirname + '/public/propose.html');
-});
 
-app.use(require('body-parser')());
 app.post('/propose/send', function(req, res) {
-
 
     console.log("Send request");
 
@@ -93,6 +88,7 @@ app.post('/propose/send', function(req, res) {
                     res.send(500);
 
                 } else {
+
                     console.log(data);
                     res.send(response.statusCode || 200);
 //                    res.redirect("/propose");
@@ -103,6 +99,11 @@ app.post('/propose/send', function(req, res) {
 //    else res.end();
 
 });
+
+app.get('/propose', function (req, res) {
+    res.sendfile(__dirname + '/public/propose.html');
+});
+
 
 app.get('/login', function (req, res) {
     res.sendfile(__dirname + '/public/login.html');
